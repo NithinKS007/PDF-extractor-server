@@ -11,7 +11,7 @@ export enum AuthMessages {
   ACCESS_TOKEN_REFRESHED_SUCCESSFULLY = "Access token refreshed successfully",
   NO_REFRESH_TOKEN = "No refresh token",
   AUTHENTICATION_HEADER = "Authentication header is missing",
-  NO_ACCESSTOKEN = "No access Token"
+  NO_ACCESSTOKEN = "No access Token",
 }
 
 export enum ErrorMessages {
@@ -21,4 +21,19 @@ export enum ErrorMessages {
 export enum EnvironmentVariableMessages {
   MissingCloudinaryCredentials = "Missing required cloudinary environment variables",
   MissingJwtEnvironmentVariables = "Missing required jwt environment variables",
+}
+
+export enum CloudinaryMessage {
+  FailedToUpload = "Failed to upload to cloudinary",
+  PdfOnlyAllowed = "Only PDF files are allowed",
+  NoFileToUpload = "No file uploaded",
+  PdfUploadSuccess = "Pdf uploaded successfully",
+  FailedToGetPdfData = "Failed to retrieve PDF data. Please try again later.",
+  PdfExtractSuccess= "Pdf extracted successfully"
+}
+
+export enum PdfMessages {
+  FailedToRetrievePdfList = "Failed to retrieve user pdfs",
+  FailedToRetrievePdfData = "Failed to retrieve pdf data",
+  PdfDataRetrievedSuccess = "Pdf data retrieved successfully",
 }

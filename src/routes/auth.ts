@@ -5,7 +5,7 @@ import { signup, signin, signout } from "../controllers/auth.controller";
 import { validationMiddleware } from "../middlewares/validation.middleware";
 import { signinValidator } from "../validators/sign.in.validator";
 import { signupValidator } from "../validators/sign.up.validator";
-import { refreshAccessToken } from "../controllers/jwt.controllet";
+import { refreshAccessToken } from "../controllers/jwt.controller";
 
 auth.post("/sign-up", signupValidator, validationMiddleware, signup);
 auth.post("/sign-in", signinValidator, validationMiddleware, signin);

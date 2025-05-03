@@ -5,7 +5,7 @@ import { StatusCodes } from "../utils/http.status.codes";
 import { AuthMessages } from "../utils/http.status.messages";
 import { comparePassword, hashPassword } from "../utils/hash.password";
 import { AppError } from "../utils/app.error";
-import { generateAccessToken, generateRefreshToken } from "./jwt.controllet";
+import { generateAccessToken, generateRefreshToken } from "./jwt.controller";
 
 /*  
     Route: POST api/v1/auth/sign-up
