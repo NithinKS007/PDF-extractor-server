@@ -1,3 +1,7 @@
+/*  
+    Custom error class that extends the built-in Error class. 
+    This class is used to create errors with additional properties, such as a status code and error message.
+*/
 export class AppError extends Error {
   statusCode: number;
 

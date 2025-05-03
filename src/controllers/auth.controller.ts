@@ -9,9 +9,11 @@ import { generateAccessToken, generateRefreshToken } from "./jwt.controller";
 
 /*  
     Route: POST api/v1/auth/sign-up
-    Purpose: user sign-up
+    Purpose:  User sign-up - Register a new user with provided name, email, and password
+    Incoming: { name, email, password } (body)
+    Returns: { createdUser } (user data), message (success message)
 */
-export const signup = async (req: Request, res: Response) => {
+export const signup = async (req: Request, res: Response): Promise<void> => {
   const { email, name, password } = req.body;
 
   if (!name || !email || !password) {
@@ -44,10 +46,12 @@ export const signup = async (req: Request, res: Response) => {
 
 /*  
     Route: POST api/v1/auth/sign-in
-    Purpose: user sign-in
+    Purpose: User sign-in - Authenticate and generate access and refresh tokens
+    Incoming: { email, password } (body)
+    Returns: { userData, accessToken } (user data without password and access token), message (success message)
 */
 
-export const signin = async (req: Request, res: Response) => {
+export const signin = async (req: Request, res: Response): Promise<void> => {
   const { email, password: bodyPassword } = req.body;
 
   const userData = await userModel.findOne({ email });
@@ -82,12 +86,6 @@ export const signin = async (req: Request, res: Response) => {
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
-  console.log("Sending response after sign-in:", {
-    refreshToken: refreshToken,
-    userWithoutPassword: userWithoutPassword,
-    accessToken: accessToken,
-  });
-
   sendResponse(
     res,
     StatusCodes.OK,
@@ -98,10 +96,12 @@ export const signin = async (req: Request, res: Response) => {
 
 /*  
     Route: POST api/v1/auth/sign-out
-    Purpose: user sign-out
+    Purpose: User sign-out - Clear refresh token cookie
+    Incoming: None (cookies)
+    Returns: message (logout success message)
 */
 
-export const signout = async (req: Request, res: Response) => {
+export const signout = async (req: Request, res: Response): Promise<void> => {
   res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: true,

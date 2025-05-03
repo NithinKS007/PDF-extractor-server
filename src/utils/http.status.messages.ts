@@ -19,21 +19,21 @@ export enum ErrorMessages {
 }
 
 export enum EnvironmentVariableMessages {
-  MissingCloudinaryCredentials = "Missing required cloudinary environment variables",
-  MissingJwtEnvironmentVariables = "Missing required jwt environment variables",
+  MISSING_CLOUDINARY_CREDENTIALS = "Missing required Cloudinary environment variables",
+  MISSING_JWT_ENVIRONMENT_VARIABLES = "Missing required JWT environment variables",
 }
 
 export enum CloudinaryMessage {
-  FailedToUpload = "Failed to upload to cloudinary",
-  PdfOnlyAllowed = "Only PDF files are allowed",
-  NoFileToUpload = "No file uploaded",
-  PdfUploadSuccess = "Pdf uploaded successfully",
-  FailedToGetPdfData = "Failed to retrieve PDF data. Please try again later.",
-  PdfExtractSuccess= "Pdf extracted successfully"
+  FAILED_TO_UPLOAD = "Failed to upload to Cloudinary",
+  PDF_ONLY_ALLOWED = "Only PDF files are allowed",
+  NO_FILE_TO_UPLOAD = "No file uploaded",
+  PDF_UPLOAD_SUCCESS = "PDF uploaded successfully",
+  FAILED_TO_GET_PDF_DATA = "Failed to retrieve PDF data. Please try again later.",
+  PDF_EXTRACT_SUCCESS = "PDF extracted successfully"
 }
 
 export enum PdfMessages {
-  FailedToRetrievePdfList = "Failed to retrieve user pdfs",
-  FailedToRetrievePdfData = "Failed to retrieve pdf data",
-  PdfDataRetrievedSuccess = "Pdf data retrieved successfully",
+  FAILED_TO_RETRIEVE_PDF_LIST = "Failed to retrieve user PDFs",
+  FAILED_TO_RETRIEVE_PDF_DATA = "Failed to retrieve PDF data",
+  PDF_DATA_RETRIEVED_SUCCESS = "PDF data retrieved successfully",
 }

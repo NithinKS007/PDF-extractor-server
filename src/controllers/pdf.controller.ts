@@ -10,12 +10,14 @@ import { PDFDocument } from "pdf-lib";
 
 /*  
     Route: POST api/v1/pdf/upload
-    Purpose: user uploading pdf
+    Purpose: Upload a PDF file to Cloudinary and store its metadata in the database
+    Incoming: { file } (PDF file in the request body)
+    Returns: { pdfData } (metadata of the uploaded PDF)
 */
-export const addPdf = async (req: Request, res: Response) => {
+export const addPdf = async (req: Request, res: Response):Promise<void> => {
   if (!req?.file) {
     throw new AppError(
-      CloudinaryMessage.NoFileToUpload,
+      CloudinaryMessage.NO_FILE_TO_UPLOAD,
       StatusCodes.BAD_REQUEST
     );
   }
@@ -27,7 +29,7 @@ export const addPdf = async (req: Request, res: Response) => {
 
   if (!url || !publicId) {
     throw new AppError(
-      CloudinaryMessage.FailedToUpload,
+      CloudinaryMessage.FAILED_TO_UPLOAD,
       StatusCodes.BAD_REQUEST
     );
   }
@@ -42,16 +44,18 @@ export const addPdf = async (req: Request, res: Response) => {
     res,
     StatusCodes.OK,
     { pdfData },
-    CloudinaryMessage.PdfUploadSuccess
+    CloudinaryMessage.PDF_UPLOAD_SUCCESS
   );
 };
 
 /*  
     Route: POST api/v1/pdf/retrieve-pdfs
-    Purpose: user retrieving pdfs
+    Purpose: Retrieve the list of PDFs uploaded by the current user
+    Incoming: None (retrieved from user context)
+    Returns: { pdfs } (list of PDF metadata)
 */
 
-export const getPdfs = async (req: Request, res: Response) => {
+export const getPdfs = async (req: Request, res: Response):Promise<void>  => {
   const userId = req?.user?.userId;
   const pdfs = await pdfModel
     .find({ userId: new mongoose.Types.ObjectId(userId) })
@@ -59,7 +63,7 @@ export const getPdfs = async (req: Request, res: Response) => {
 
   if (!pdfs) {
     throw new AppError(
-      PdfMessages.FailedToRetrievePdfList,
+      PdfMessages.FAILED_TO_RETRIEVE_PDF_LIST,
       StatusCodes.BAD_REQUEST
     );
   }
@@ -68,16 +72,18 @@ export const getPdfs = async (req: Request, res: Response) => {
     res,
     StatusCodes.OK,
     { pdfs: pdfs },
-    CloudinaryMessage.PdfUploadSuccess
+    CloudinaryMessage.PDF_UPLOAD_SUCCESS
   );
 };
 
 /*  
     Route: POST api/v1/pdf/extract
-    Purpose: user extract pages and create new pdf
+    Purpose: Extract specified pages from an existing PDF and create a new PDF
+    Incoming: { pdfId, pages } (PDF ID in URL params and page numbers in body)
+    Returns: { newCreatedPdf } (new PDF with extracted pages)
 */
 
-export const extractPagesToNewPdf = async (req: Request, res: Response) => {
+export const extractPagesToNewPdf = async (req: Request, res: Response):Promise<void>  => {
   const pdfId = req.params.pdfId;
   const userId = req?.user?.userId;
   const pages = req.body.pages;
@@ -88,7 +94,7 @@ export const extractPagesToNewPdf = async (req: Request, res: Response) => {
 
   if (!pdfData) {
     throw new AppError(
-      PdfMessages.FailedToRetrievePdfData,
+      PdfMessages.FAILED_TO_RETRIEVE_PDF_DATA,
       StatusCodes.BAD_REQUEST
     );
   }
@@ -119,6 +125,6 @@ export const extractPagesToNewPdf = async (req: Request, res: Response) => {
     res,
     StatusCodes.OK,
     { newCreatedPdf },
-    CloudinaryMessage.PdfExtractSuccess
+    CloudinaryMessage.PDF_EXTRACT_SUCCESS
   );
 };

@@ -12,12 +12,18 @@ import { StatusCodes } from "../utils/http.status.codes";
 import { sendResponse } from "../utils/send.response";
 dotenv.config();
 
-// Environment variables
+/*
+   Environment variables
+*/
 const jwtSecret = process.env.JWT_SECRET!;
 const jwtExpiration = process.env.JWT_EXPIRATION!;
 const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET!;
 const jwtRefreshExpiration = process.env.JWT_REFRESH_EXPIRATION!;
 
+/*  
+    Purpose: Validates the existence of required JWT environment variables
+    Throws: AppError if any required environment variables are missing
+*/
 const validateEnv = (): void => {
   if (
     !jwtSecret ||
@@ -26,13 +32,17 @@ const validateEnv = (): void => {
     !jwtRefreshExpiration
   ) {
     throw new AppError(
-      EnvironmentVariableMessages.MissingJwtEnvironmentVariables,
+      EnvironmentVariableMessages.MISSING_JWT_ENVIRONMENT_VARIABLES,
       StatusCodes.BAD_REQUEST
     );
   }
 };
 
-// Function to generate Access Token
+/*  
+    Purpose: Generates an Access Token using the provided payload
+    Incoming: { userId, email } (payload)
+    Returns: { accessToken } (JWT token)
+*/
 const generateAccessToken = (payload: TokenPayload): string => {
   validateEnv();
   return jwt.sign(payload, jwtSecret, {
@@ -40,7 +50,11 @@ const generateAccessToken = (payload: TokenPayload): string => {
   });
 };
 
-// Function to generate Refresh Token
+/*  
+    Purpose: Generates a Refresh Token using the provided payload
+    Incoming: { userId, email } (payload)
+    Returns: { refreshToken } (JWT token)
+*/
 const generateRefreshToken = (payload: TokenPayload): string => {
   validateEnv();
   return jwt.sign(payload, jwtRefreshSecret, {
@@ -48,13 +62,23 @@ const generateRefreshToken = (payload: TokenPayload): string => {
   });
 };
 
-// Function to authenticate Access Token
+/*  
+    Purpose: Verifies and decodes an Access Token
+    Incoming: { token } (JWT access token)
+    Returns: { userId, email } (decoded payload)
+    Throws: AppError if the token is invalid or expired
+*/
 const authenticateAccessToken = (token: string): TokenPayload => {
   validateEnv();
   return jwt.verify(token, jwtSecret) as TokenPayload;
 };
 
-// Function to authenticate Refresh Token
+/*  
+    Purpose: Verifies and decodes a Refresh Token
+    Incoming: { token } (JWT refresh token)
+    Returns: { userId, email } (decoded payload)
+    Throws: AppError if the token is invalid or expired
+*/
 const authenticateRefreshToken = (token: string): TokenPayload => {
   validateEnv();
   return jwt.verify(token, jwtRefreshSecret) as TokenPayload;
@@ -62,10 +86,15 @@ const authenticateRefreshToken = (token: string): TokenPayload => {
 
 /*  
     Route: POST api/v1/auth/refresh-access-token
-    Purpose: user refresh access token after expiration
+    Purpose: Refreshes the access token using the provided refresh token
+    Incoming: { refreshToken } (cookie)
+    Returns: { newAccessToken } (newly generated JWT access token)
 */
 
-const refreshAccessToken = async (req: Request, res: Response) => {
+const refreshAccessToken = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const refreshToken = req?.cookies?.refreshToken;
 
   if (!refreshToken) {

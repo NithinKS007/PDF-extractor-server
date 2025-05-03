@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+/* 
+  Function to connect to the MongoDB database.
+  It attempts to connect using the URI from environment variables.
+  If the connection fails, or if the URI is not provided, the process exits with a failure status code.
+*/
 const connectDB = async (): Promise<void> => {
   const uri: string = process.env.ATLAS_DATABASE_CONFIG!;
   if (!uri) {
