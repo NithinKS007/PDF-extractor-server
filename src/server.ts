@@ -1,10 +1,10 @@
 import express from "express";
-import { auth } from "./routes/auth";
+import { auth } from "./routes/auth.routes";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { errorMiddleware } from "./middlewares/error.middleware";
-import { pdf } from "./routes/pdf";
+import { pdf } from "./routes/pdf.routes";
 
 dotenv.config();
 
