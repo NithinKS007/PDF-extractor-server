@@ -104,8 +104,8 @@ export const signin = async (req: Request, res: Response): Promise<void> => {
 export const signout = async (req: Request, res: Response): Promise<void> => {
   res.clearCookie("refreshToken", {
     httpOnly: true,
-    secure: true,
-    sameSite: "strict",
+    sameSite: "none",
+    secure: process.env.NODE_ENV === "PRODUCTION",
   });
   sendResponse(res, StatusCodes.OK, null, AuthMessages.LOGOUTSUCCESSFUL);
 };

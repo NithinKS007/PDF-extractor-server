@@ -67,7 +67,7 @@ export const getPdfs = async (req: Request, res: Response):Promise<void>  => {
       StatusCodes.BAD_REQUEST
     );
   }
-
+  console.log("Pdfs",pdfs)
   sendResponse(
     res,
     StatusCodes.OK,
