@@ -57,9 +57,17 @@ export const addPdf = async (req: Request, res: Response):Promise<void> => {
 
 export const getPdfs = async (req: Request, res: Response):Promise<void>  => {
   const userId = req?.user?.userId;
-  const pdfs = await pdfModel
-    .find({ userId: new mongoose.Types.ObjectId(userId) })
-    .sort({ createdAt: -1 });
+
+  const page = parseInt(req.query.page as string) || 1;  
+  const limit = parseInt(req.query.limit as string) || 10;
+
+  const skip = (page - 1) * limit;
+
+    const pdfs = await pdfModel
+      .find({ userId: new mongoose.Types.ObjectId(userId) })
+      .skip(skip)     
+      .limit(limit)    
+      .sort({ createdAt: -1 }); 
 
   if (!pdfs) {
     throw new AppError(
@@ -68,11 +76,13 @@ export const getPdfs = async (req: Request, res: Response):Promise<void>  => {
     );
   }
   console.log("Pdfs",pdfs)
+  const totalPdfs = await pdfModel.countDocuments({ userId: new mongoose.Types.ObjectId(userId) });
+  const totalPages = Math.ceil(totalPdfs / limit);
   sendResponse(
     res,
     StatusCodes.OK,
-    { pdfs: pdfs },
-    CloudinaryMessage.PDF_UPLOAD_SUCCESS
+    { pdfs: pdfs, totalPages: totalPages, currentPage: page },
+    PdfMessages.PDF_DATA_RETRIEVED_SUCCESS
   );
 };
 
