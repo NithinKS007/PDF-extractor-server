@@ -65,7 +65,7 @@ export const addPdf = async (req: Request, res: Response): Promise<void> => {
 /*  
     Route: POST api/v1/pdf/retrieve-pdfs
     Purpose: Retrieve the list of PDFs uploaded by the current user
-     Incoming: Query parameters `page` and `limit` (optional) for pagination.
+     Incoming: Query parameters `page` and `limit` (optional) for pagination `searchQuery` for search functionality.
               User ID is extracted from user context.
     Returns: A JSON object containing:
       -  pdfs       : List of PDF metadata.
@@ -83,13 +83,13 @@ export const getPdfs = async (req: Request, res: Response): Promise<void> => {
   const searchQuery = (req.query.searchQuery as string) || "";
 
   const searchFilter = searchQuery
-  ? {
-      fileName: { $regex: `^${searchQuery}`, $options: 'i' },  
-    }
-  : {};  
+    ? {
+        fileName: { $regex: `^${searchQuery}`, $options: "i" },
+      }
+    : {};
 
   const pdfs = await pdfModel
-    .find({ userId: new mongoose.Types.ObjectId(userId),...searchFilter })
+    .find({ userId: new mongoose.Types.ObjectId(userId), ...searchFilter })
     .skip(skip)
     .limit(limit)
     .sort({ createdAt: -1 });
@@ -102,7 +102,7 @@ export const getPdfs = async (req: Request, res: Response): Promise<void> => {
   }
   const totalPdfs = await pdfModel.countDocuments({
     userId: new mongoose.Types.ObjectId(userId),
-    ...searchFilter, 
+    ...searchFilter,
   });
   const totalPages = Math.ceil(totalPdfs / limit);
   sendResponse(
