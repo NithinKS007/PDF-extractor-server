@@ -81,7 +81,7 @@ export const signin = async (req: Request, res: Response): Promise<void> => {
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    sameSite: "strict",
+    sameSite: process.env.NODE_ENV === "PRODUCTION" ? "none" : "strict",
     secure: process.env.NODE_ENV === "PRODUCTION",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
@@ -104,7 +104,7 @@ export const signin = async (req: Request, res: Response): Promise<void> => {
 export const signout = async (req: Request, res: Response): Promise<void> => {
   res.clearCookie("refreshToken", {
     httpOnly: true,
-    sameSite: "strict",
+    sameSite: process.env.NODE_ENV === "PRODUCTION" ? "none" : "strict",
     secure: process.env.NODE_ENV === "PRODUCTION",
   });
   sendResponse(res, StatusCodes.OK, null, AuthMessages.LOGOUTSUCCESSFUL);

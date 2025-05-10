@@ -80,9 +80,16 @@ export const getPdfs = async (req: Request, res: Response): Promise<void> => {
   const limit = parseInt(req.query.limit as string) || 10;
 
   const skip = (page - 1) * limit;
+  const searchQuery = (req.query.searchQuery as string) || "";
+
+  const searchFilter = searchQuery
+  ? {
+      fileName: { $regex: `^${searchQuery}`, $options: 'i' },  
+    }
+  : {};  
 
   const pdfs = await pdfModel
-    .find({ userId: new mongoose.Types.ObjectId(userId) })
+    .find({ userId: new mongoose.Types.ObjectId(userId),...searchFilter })
     .skip(skip)
     .limit(limit)
     .sort({ createdAt: -1 });
@@ -95,6 +102,7 @@ export const getPdfs = async (req: Request, res: Response): Promise<void> => {
   }
   const totalPdfs = await pdfModel.countDocuments({
     userId: new mongoose.Types.ObjectId(userId),
+    ...searchFilter, 
   });
   const totalPages = Math.ceil(totalPdfs / limit);
   sendResponse(
