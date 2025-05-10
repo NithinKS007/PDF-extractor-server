@@ -26,14 +26,17 @@ export enum EnvironmentVariableMessages {
 export enum CloudinaryMessage {
   FAILED_TO_UPLOAD = "Failed to upload to Cloudinary",
   PDF_ONLY_ALLOWED = "Only PDF files are allowed",
-  NO_FILE_TO_UPLOAD = "No file uploaded",
+
   PDF_UPLOAD_SUCCESS = "PDF uploaded successfully",
   FAILED_TO_GET_PDF_DATA = "Failed to retrieve PDF data. Please try again later.",
-  PDF_EXTRACT_SUCCESS = "PDF extracted successfully"
+  PDF_EXTRACT_SUCCESS = "PDF extracted successfully",
 }
 
 export enum PdfMessages {
   FAILED_TO_RETRIEVE_PDF_LIST = "Failed to retrieve user PDFs",
   FAILED_TO_RETRIEVE_PDF_DATA = "Failed to retrieve PDF data",
   PDF_DATA_RETRIEVED_SUCCESS = "PDF data retrieved successfully",
+  PDF_FILE_NAME_IS_REQUIRED = "File name is required and must be a string",
+  NO_FILE_TO_UPLOAD = "No file uploaded",
+  NAME_ALREADY_EXISTS = "File name already exists"
 }
