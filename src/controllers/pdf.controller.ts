@@ -120,6 +120,7 @@ export const getPdfs = async (req: Request, res: Response): Promise<void> => {
       - { pdfId } in the URL parameters (ID of the PDF to extract pages from).
       - { pages } in the request body (an array of page numbers to extract).
       - { fileName } in the request body (desired name for the new PDF).
+       const deleteExistingPdf = in the request body(deleting existing pdf true or false value)
     Returns: 
       - { newCreatedPdf } (metadata of the newly created PDF, including URL and file information).
 */
@@ -132,6 +133,7 @@ export const extractPagesToNewPdf = async (
   const userId = req?.user?.userId;
   const pages = req.body.pages;
   const fileName = req?.body?.fileName;
+  const deleteExistingPdf = req?.body?.deleteExistingPdf;
 
   const pdfData = await pdfModel.findById({
     _id: new mongoose.Types.ObjectId(pdfId),
@@ -178,6 +180,10 @@ export const extractPagesToNewPdf = async (
     publicId: newPublicId,
     userId: userId,
   });
+
+  if (deleteExistingPdf) {
+    await pdfModel.findByIdAndDelete(pdfId);
+  }
 
   sendResponse(
     res,
